@@ -1,9 +1,8 @@
 from __future__ import unicode_literals
 
-import logging
 import requests
 
-logger = logging.getLogger(__name__)
+from urllib.parse import urlencode, urlparse, parse_qs
 
 
 class WebRequest:
@@ -14,8 +13,17 @@ class WebRequest:
     def request(self):
         if self.url is None:
             return
-        logger.info('Requesting: {}'.format(self.url))
+        msg = 'Requesting: {}'.format(self.url)
+        print(msg)
         try:
             return requests.get(self.url)
         except Exception:
-            logger.exception("Request for {} Failed".format(self.url))
+            print("Request for {} Failed".format(self.url))
+
+
+def generate_url(base_url, payload={}):
+    return '{}?{}'.format(base_url, urlencode(payload))
+
+
+def decode_url(url):
+    return parse_qs(urlparse(url).query)
